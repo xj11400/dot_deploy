@@ -7,6 +7,14 @@
 # colors
 # ======
 #_color_selected="\033[0m"
+# readonly SELECTED="[x]"
+# readonly UNSELECTED="[ ]"
+# 
+# readonly WHITE="\033[2K\033[37m"
+# readonly BLUE="\033[2K\033[34m"
+# readonly RED="\033[2K\033[31m"
+# readonly GREEN="\033[2K\033[32m"
+
 
 # sign
 # ====
