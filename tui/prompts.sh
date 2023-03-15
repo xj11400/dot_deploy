@@ -78,6 +78,16 @@ _prompt_text() {
     echo -en "\033[32m?\033[0m\033[1m ${1}\033[0m " >&2
 }
 
+# display hint text without linebreak
+_hint_text() {
+    echo -en "\033[30m(${1})\033[0m" >&2
+}
+
+# display selected text without linebreak
+_selected_text() {
+    echo -en "  - \033[34m${1}\033[0m " >&2
+}
+
 # decrement counter $1, considering out of range for $2
 _decrement_selected() {
     local selected=$1;
@@ -390,8 +400,7 @@ checkbox() {
         _selected+=("${opts[$item]}")
     done
     _cursor_to $((startrow))
-    printf "  -" >&2
-    printf " %s" "${_selected[@]}"  >&2
+    _selected_text "${_selected[*]}"
 
     _cursor_to $((startrow+1))
     _cursor_blink_on
