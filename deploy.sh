@@ -4,6 +4,38 @@
 # stow selected
 
 
+#
+# depoly
+#
+depoly() {
+    #
+    # [select dot folder]
+    #
+    if [ ! -d "$1" ]; then
+        show_error "$1 not exist!!!"
+        exit
+    fi
+
+    # get folder list array
+    list_of_dirs $1 _dir_list
+
+    # checkbox
+    _selected_conf=('zsh' 'vim' 'tmux' 'nvim' 'git' 'utils')
+    checkbox "select config" "" _dir_list _selected_conf
+    # list "select config" "_" _dir_list _selected_conf
+
+    echo ${_selected_conf[*]}
+
+    #
+    # [stow]
+    #
+
+    # stow
+    for _d in "${_selected_conf[@]}"; do
+        stow -d $PARENT_DIR -t $HOME $_d
+    done
+}
+
 # init deploy
 #
 init_deploy(){

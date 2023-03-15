@@ -4,8 +4,7 @@
 # 1. list folder
 # 2. check exist
 #    - fore : exist folder rename to exist_bk
-#    - ignore
-#    - exit
+#    - skip
 # 3.
 
 set -e
@@ -26,6 +25,11 @@ TARGET_DIR=$HOME
 printf ".dotfiles dir: %s\n" "$PARENT_DIR"
 
 #
+# options variable
+#
+_user_repo="https://github.com/xj11400/dot_custom.git"
+
+#
 # source files
 #
 source $DIR/deploy.sh
@@ -38,51 +42,34 @@ printf "platform    : %s\n" "$(detect_os)"
 #
 # check commands
 #
-_chk_cmd=( 'git' 'zsh' 'npm' 'xj' )
+_chk_cmd=('git' 'zsh' 'npm' 'xj')
 
-for cmd in ${_chk_cmd[@]};do
+for cmd in ${_chk_cmd[@]}; do
     check_command $cmd
 done
 
 #
-# select dot folder
+# depoly .dotfiles
 #
-
-# get folder list array
-list_of_dirs $PARENT_DIR _dir_list
-
-# checkbox
-_selected_conf=( 'zsh' 'vim' 'tmux' 'nvim' 'git' 'utils' )
-checkbox "select config" "" _dir_list _selected_conf
-# list "select config" "_" _dir_list _selected_conf
-
-echo ${_selected_conf[*]}
+# _config_path
+depoly $PARENT_DIR
 exit
 
 #
-# stow
+# user dotfiles
 #
 
-# check directory exist
-for _d in "${_selected_conf[@]}";do
-    if [ -d $TARGET_DIR/.config/$_d ];then
-        show_warning "folder exist : $TARGET_DIR/$_d"
-        _confirmed=$(confirm "force replace?")
-    fi
-done
-
-
-# stow
-# stow $PARENT_DIR $HOME
-
-#
-# user dotfile repo
-#
-
-# select folder
-# stow
+# - clone repo
+_user_dir="$PARENT_DIR/_custom"
+if [ -d "${_user_dir}"]; then
+    show_warning "${_user_dir} is already exist."
+else
+    git clone $_user_repo $_user_dir
+    _depoly "$_user_dir"
+fi
 
 #
 # git config
 #
-
+exit
+source $DIR/git.sh
