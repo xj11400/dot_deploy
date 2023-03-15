@@ -17,3 +17,19 @@ show_error() {
 show_success() {
     echo -e "\033[92;1m✔ $1\033[0m" >&2
 }
+
+# @description Display warning message in stderr, prefixed by cross emoji
+# @arg $1 string warning message to display
+# @example
+#   show_warning "There it is! World peace."
+show_warning() {
+    echo -e "\033[93;1m❢ $1\033[0m" >&2
+}
+
+# @description Display Hint message in stderr, prefixed by cross emoji
+# @arg $1 string Hint message to display
+# @example
+#   show_hint "There it is! World peace."
+show_hint() {
+    echo -e "\033[90;1m✱ $1\033[0m" >&2
+}
