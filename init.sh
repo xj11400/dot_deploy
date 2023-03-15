@@ -37,12 +37,12 @@ source $DIR/deploy.sh
 #
 # show device info
 #
-printf "platform    : %s\n" "$(detect_os)"
+printf "platform     : %s\n" "$(detect_os)"
 
 #
 # check commands
 #
-_chk_cmd=('git' 'zsh' 'npm' 'xj')
+_chk_cmd=('git' 'stow' 'zsh' 'npm' 'xj')
 
 for cmd in ${_chk_cmd[@]}; do
     check_command $cmd
@@ -52,7 +52,7 @@ done
 # depoly .dotfiles
 #
 # _config_path
-depoly $PARENT_DIR
+depoly "$PARENT_DIR"
 exit
 
 #
@@ -73,3 +73,8 @@ fi
 #
 exit
 source $DIR/git.sh
+
+##
+exit
+sudo chsh -s /bin/zsh
+sudo sh -c "echo 'export SHELL=/bin/zsh' > /etc/zsh/zshrc"

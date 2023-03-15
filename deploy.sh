@@ -21,7 +21,8 @@ depoly() {
 
     # checkbox
     _selected_conf=('zsh' 'vim' 'tmux' 'nvim' 'git' 'utils')
-    checkbox "select config" "" _dir_list _selected_conf
+    # checkbox "select config" "" _dir_list _selected_conf
+    checkbox_input "select config" _dir_list _selected_conf
     # list "select config" "_" _dir_list _selected_conf
 
     echo ${_selected_conf[*]}
@@ -50,6 +51,7 @@ init_deploy(){
 
     source $_source_dir/tui/tui.sh
     source $_source_dir/function/funcs.sh
+    source $_source_dir/_tmp/iquierr/dist/checkbox_input.sh
 }
 
 init_deploy
