@@ -183,6 +183,18 @@ input() {
     echo -n "${text}"
 }
 
+# @description The stty raw mode prevents ctrl-c from working
+#              and can get you stuck in an input loop with no
+#              way out. Also the man page says stty -raw is not
+#              guaranteed to return your terminal to the same state.
+# @arg $1 reference set received char
+# https://stackoverflow.com/a/30022297
+_read_char() {
+    stty -icanon -echo
+    eval "$1=\$(dd bs=1 count=1 2>/dev/null)"
+    stty icanon echo
+}
+
 # @description Show confirm dialog for yes/no
 # @arg $1 string Phrase for promptint to text
 # @stdout 0 for no, 1 for yes
@@ -192,17 +204,18 @@ input() {
 #   if [ "$confirmed" = "0" ]; then echo "No?"; else echo "Yes!"; fi
 confirm() {
     _prompt_text "$1 (y/N)"
-    echo -en "\033[36m\c " >&2
     local result=""
-    echo -n " " >&2
     until [[ "$result" == "y" ]] || [[ "$result" == "n" ]] || [[ "$result" == "Y" ]] || [[ "$result" == "N" ]]
     do
-        echo -e "\033[1D\c " >&2
-        # shellcheck disable=SC2162
-        read -n1 result
-    done
-    echo -en "\033[0m" >&2
+        _read_char result
 
+        if [ ${#result} -eq 0 ]; then
+            # echo "Enter was hit" >&2
+            result="n"
+        fi
+    done
+
+    echo -en "\033[36m$result\033[0m" >&2
     case "$result" in
         y|Y) echo -n 1 ;;
         n|N) echo -n 0 ;;
