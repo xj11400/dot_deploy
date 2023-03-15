@@ -21,6 +21,7 @@ while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symli
 done
 DIR="$(cd -P "$(dirname "$SOURCE")" && pwd)"
 PARENT_DIR=$(dirname "$DIR")
+TARGET_DIR=$HOME
 
 printf ".dotfiles dir: %s\n" "$PARENT_DIR"
 
@@ -37,24 +38,42 @@ printf "platform    : %s\n" "$(detect_os)"
 #
 # check commands
 #
-check_command "git"
-check_command "zsh"
-check_command "npm"
-check_command "xj"
+_chk_cmd=( 'git' 'zsh' 'npm' 'xj' )
+
+for cmd in ${_chk_cmd[@]};do
+    check_command $cmd
+done
 
 #
 # select dot folder
 #
 
 # get folder list array
+list_of_dirs $PARENT_DIR _dir_list
+
 # checkbox
+_selected_conf=( 'zsh' 'vim' 'tmux' 'nvim' 'git' 'utils' )
+checkbox "select config" "" _dir_list _selected_conf
+# list "select config" "_" _dir_list _selected_conf
+
+echo ${_selected_conf[*]}
+exit
 
 #
 # stow
 #
 
 # check directory exist
+for _d in "${_selected_conf[@]}";do
+    if [ -d $TARGET_DIR/.config/$_d ];then
+        show_warning "folder exist : $TARGET_DIR/$_d"
+        _confirmed=$(confirm "force replace?")
+    fi
+done
+
+
 # stow
+# stow $PARENT_DIR $HOME
 
 #
 # user dotfile repo
