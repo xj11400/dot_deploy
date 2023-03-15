@@ -225,7 +225,7 @@ list() {
 
     local _options=$2[@]
     local opts; opts=( "${!_options}" )
-    local opts_count; opts_count=$((${#_options}-1))
+    local opts_count; opts_count=$((${#opts[@]}))
     _new_line_foreach_item "${#opts[@]}"
 
     # determine current screen position for overwriting the options
@@ -276,7 +276,7 @@ list() {
 
     # show selected
     _cursor_to $((startrow-1))
-    printf "  - %s" "${opts[$selected]}"  >&2
+    _selected_text "${opts[$selected]}"
 
     _cursor_to $((startrow))
     _cursor_blink_on
@@ -321,7 +321,7 @@ checkbox() {
     _prompt_text "$1"
 
     local opts; opts=( "${!_options}" )
-    local opts_count; opts_count=$((${#_options}-1))
+    local opts_count; opts_count=$((${#opts[@]}))
     _new_line_foreach_item "${#opts[@]}"
 
     # determine current screen position for overwriting the options
