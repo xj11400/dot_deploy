@@ -283,9 +283,10 @@ list() {
 
     if [ ! -z "$3" ];then
         local "$3" && _upvar $3 "${opts[$selected]}"
+    else
+        echo -n "${selected}"
     fi
 
-    echo -n "${selected}"
 }
 
 # @description Render a text based list of options, where multiple can be selected by the
@@ -407,9 +408,9 @@ checkbox() {
 
     if [ ! -z "$3" ];then
         local "$3" && _upvar $3 "${_selected[@]}"
+    else
+        IFS="" echo -n "${checked[@]}"
     fi
-
-    IFS="" echo -n "${checked[@]}"
 }
 
 # @description Show password prompt displaying stars for each password character letter typed
