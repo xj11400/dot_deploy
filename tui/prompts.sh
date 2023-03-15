@@ -80,7 +80,9 @@ _prompt_text() {
 
 # display hint text without linebreak
 _hint_text() {
-    echo -en "\033[30m(${1})\033[0m" >&2
+    if [ ! -z $1 ];then
+        echo -en "\033[30m(${1})\033[0m" >&2
+    fi
 }
 
 # display selected text without linebreak
@@ -222,8 +224,9 @@ confirm() {
 #   echo "Your choice: ${options[$option]}"
 list() {
     _prompt_text "$1 "
+    _hint_text "$2"
 
-    local _options=$2[@]
+    local _options=$3[@]
     local opts; opts=( "${!_options}" )
     local opts_count; opts_count=$((${#opts[@]}))
     _new_line_foreach_item "${#opts[@]}"
@@ -281,8 +284,8 @@ list() {
     _cursor_to $((startrow))
     _cursor_blink_on
 
-    if [ ! -z "$3" ];then
-        local "$3" && _upvar $3 "${opts[$selected]}"
+    if [ ! -z "$4" ];then
+        local "$4" && _upvar $4 "${opts[$selected]}"
     else
         echo -n "${selected}"
     fi
@@ -301,8 +304,8 @@ list() {
 #   checked=$(checkbox "Select one or more items" "${options[@]}")
 #   echo "Your choices: ${checked}"
 checkbox() {
-    local _options=$2[@]
-    local _selected=$3[@]
+    local _options=$3[@]
+    local _selected=$4[@]
 
     local checked=()
 
@@ -320,6 +323,7 @@ checkbox() {
     fi
 
     _prompt_text "$1"
+    _hint_text "$2"
 
     local opts; opts=( "${!_options}" )
     local opts_count; opts_count=$((${#opts[@]}))
@@ -406,8 +410,8 @@ checkbox() {
     _cursor_to $((startrow+1))
     _cursor_blink_on
 
-    if [ ! -z "$3" ];then
-        local "$3" && _upvar $3 "${_selected[@]}"
+    if [ ! -z "$4" ];then
+        local "$4" && _upvar $4 "${_selected[@]}"
     else
         IFS="" echo -n "${checked[@]}"
     fi
