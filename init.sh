@@ -22,13 +22,24 @@ DIR="$(cd -P "$(dirname "$SOURCE")" && pwd)"
 PARENT_DIR=$(dirname "$DIR")
 TARGET_DIR=$HOME
 
-printf ".dotfiles dir: %s\n" "$PARENT_DIR"
-
 #
 # options variable
 #
-_user_repo="https://github.com/xj11400/dot_custom.git"
+_custom_conf=$DIR/custom.conf
+if [ ! -f "$_custom_conf" ];then
+    echo "no $_custom_conf"
+    cp "$DIR/default.conf" "$_custom_conf"
+fi
 
+source $_custom_conf
+
+_user_repo=$custom_repo
+# declare _user_repo
+# if [ -z "$1" ];then
+#     _user_repo="$_xj_custom_repo"
+# else
+#     _user_repo="$custom_repo"
+# fi
 #
 # source files
 #
@@ -36,9 +47,11 @@ source $DIR/tui/tui.sh
 source $DIR/function/funcs.sh
 
 #
-# show device info
+# show info
 #
 printf "platform     : %s\n" "$(detect_os)"
+printf ".dotfiles dir: %s\n" "$PARENT_DIR"
+printf "repo         : %s\n" "$_user_repo"
 
 #
 # check commands
@@ -57,11 +70,18 @@ done
 list_of_dirs $PARENT_DIR _dir_list
 
 # checkbox
-_selected_conf=('zsh' 'vim' 'tmux' 'nvim' 'git' 'utils')
+_selected_conf=("${stow_dir[@]}")
 checkbox_input "select config" "(x)" _dir_list _selected_conf
 
 echo ${_selected_conf[*]}
 stow_dot $PARENT_DIR _selected_conf
+
+#
+# write conf
+#
+echo "# last: $(date)" > $_custom_conf
+echo "stow_dir=(${_selected_conf[*]})" >> $_custom_conf
+echo "custom_repo=\"${_user_repo}\"" >> $_custom_conf
 
 #
 # user dotfiles
