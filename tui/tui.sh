@@ -19,14 +19,8 @@ tui() {
     # shellcheck disable=SC1091
     source "$_source_dir/platform_helpers.sh"
 
-    # shellcheck disable=SC1091
-    source "$_source_dir/prompts.sh"
-    # shellcheck disable=SC1091
-    source "$_source_dir/user_feedback.sh"
-    # shellcheck disable=SC1091
-    source "$_source_dir/logging.sh"
-    # shellcheck disable=SC1091
-    source "$_source_dir/platform_helpers.sh"
+    source "$_source_dir/inquirer.sh"
+
 }
 
 tui

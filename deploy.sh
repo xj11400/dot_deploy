@@ -51,7 +51,6 @@ init_deploy(){
 
     source $_source_dir/tui/tui.sh
     source $_source_dir/function/funcs.sh
-    source $_source_dir/_tmp/iquierr/dist/checkbox_input.sh
 }
 
 init_deploy
