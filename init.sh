@@ -32,7 +32,8 @@ _user_repo="https://github.com/xj11400/dot_custom.git"
 #
 # source files
 #
-source $DIR/deploy.sh
+source $DIR/tui/tui.sh
+source $DIR/function/funcs.sh
 
 #
 # show device info
@@ -51,9 +52,16 @@ done
 #
 # depoly .dotfiles
 #
-# _config_path
-depoly "$PARENT_DIR"
-exit
+
+# get folder list array
+list_of_dirs $PARENT_DIR _dir_list
+
+# checkbox
+_selected_conf=('zsh' 'vim' 'tmux' 'nvim' 'git' 'utils')
+checkbox_input "select config" "(x)" _dir_list _selected_conf
+
+echo ${_selected_conf[*]}
+stow_dot $PARENT_DIR _selected_conf
 
 #
 # user dotfiles
@@ -61,12 +69,15 @@ exit
 
 # - clone repo
 _user_dir="$PARENT_DIR/_custom"
-if [ -d "${_user_dir}"]; then
+if [ -d "${_user_dir}" ]; then
     show_warning "${_user_dir} is already exist."
 else
     git clone $_user_repo $_user_dir
-    _depoly "$_user_dir"
 fi
+
+list_of_dirs $_user_dir _custom_dir_list
+echo ${_custom_dir_list[*]}
+stow_dot $_user_dir _custom_dir_list
 
 #
 # git config
