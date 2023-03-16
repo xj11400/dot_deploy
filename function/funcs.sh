@@ -62,3 +62,25 @@ list_of_dirs() {
         IFS="" echo -n "${_dir_options[@]}"
     fi
 }
+
+stow_dot() {
+    local _dir=$1
+    local _list=$2[@]
+    for _d in ${!_list}; do
+        echo "${_dir}/$_d"
+        stow -d $_dir -t $HOME $_d --no-folding
+        # prograss bar
+        # [=======         ] 35% $_d
+    done
+}
+
+restow_dot() {
+    local _dir=$1
+    local _list=$2[@]
+    for _d in ${!_list}; do
+        echo "${_dir}/$_d"
+        stow -d $_dir -t $HOME $_d --no-folding --restow
+        # prograss bar
+        # [=======         ] 35% $_d
+    done
+}
