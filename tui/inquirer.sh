@@ -291,7 +291,8 @@ _checkbox_input() {
   local i
   local j
   prompt=$1
-  eval _checkbox_list=( '"${'${2}'[@]}"' )
+  hint=$2
+  eval _checkbox_list=( '"${'${3}'[@]}"' )
   _current_index=0
   _first_keystroke=true
 
@@ -300,14 +301,14 @@ _checkbox_input() {
   stty -echo
   tput civis
 
-  print "${normal}${green}?${normal} ${bold}${prompt}${normal} ${dim}(Press <space> to select, <enter> to finalize)${normal}"
+  print "${normal}${green}?${normal} ${bold}${prompt}${normal} ${dim}${hint}${normal}"
 
   for i in $(gen_index ${#_checkbox_list[@]}); do
     _checkbox_selected[$i]=false
   done
 
   if [ -n "$3" ]; then
-    eval _selected_indices=( '"${'${3}'[@]}"' )
+    eval _selected_indices=( '"${'${4}'[@]}"' )
 
     for i in $(gen_index ${#_checkbox_list[@]}); do
       for se in "${_selected_indices[@]}"; do
@@ -344,8 +345,8 @@ _checkbox_input() {
 }
 
 checkbox_input() {
-  _checkbox_input "$1" "$2" "$3"
-  _checkbox_input_output_var_name=$3
+  _checkbox_input "$1" "$2" "$3" "$4"
+  _checkbox_input_output_var_name=$4
   select_indices _checkbox_list _checkbox_selected_indices $_checkbox_input_output_var_name
 
   unset _checkbox_list
@@ -360,8 +361,8 @@ checkbox_input() {
 }
 
 checkbox_input_indices() {
-  _checkbox_input "$1" "$2" "$3"
-  _checkbox_input_output_var_name=$3
+  _checkbox_input "$1" "$2" "$3" "$4"
+  _checkbox_input_output_var_name=$4
 
   eval $_checkbox_input_output_var_name\=\(\)
   for i in $(gen_index ${#_checkbox_selected_indices[@]}); do
@@ -478,7 +479,8 @@ _list_input() {
   local i
   local j
   prompt=$1
-  eval _list_options=( '"${'${2}'[@]}"' )
+  hint=$2
+  eval _list_options=( '"${'${3}'[@]}"' )
 
   _list_selected_index=0
   _first_keystroke=true
@@ -488,7 +490,7 @@ _list_input() {
   stty -echo
   tput civis
 
-  print "${normal}${green}?${normal} ${bold}${prompt}${normal} ${dim}(Use arrow keys)${normal}"
+  print "${normal}${green}?${normal} ${bold}${prompt}${normal} ${dim}${hint}${normal}"
 
   for i in $(gen_index ${#_list_options[@]}); do
     tput cub "$(tput cols)"
@@ -509,8 +511,8 @@ _list_input() {
 }
 
 list_input() {
-  _list_input "$1" "$2"
-  local var_name=$3
+  _list_input "$1" "$2" "$3"
+  local var_name=$4
   eval $var_name=\'"${_list_options[$_list_selected_index]}"\'
   unset _list_selected_index
   unset _list_options
@@ -521,8 +523,8 @@ list_input() {
 }
 
 list_input_index() {
-  _list_input "$1" "$2"
-  local var_name=$3
+  _list_input "$1" "$2" "$3"
+  local var_name=$4
   eval $var_name=\'"$_list_selected_index"\'
   unset _list_selected_index
   unset _list_options
