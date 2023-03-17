@@ -22,8 +22,10 @@ _upvar() {
 check_command() {
     if ! [ -x "$(command -v $1)" ]; then
         show_error "command $1 not found"
+        echo -n false
     else
         show_success "command $1 found"
+        echo -n true
     fi
 }
 
