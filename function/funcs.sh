@@ -72,13 +72,12 @@ stow_dot() {
     local opts_count=$((${#opts[@]}))
 
     for _d in ${!_list}; do
-        progress_bar 50 $_idx ${opts_count} $_d
-        printf " %s" "$_d"
+        progress_bar_tag $_d 50 $_idx ${opts_count}
         stow -d $_dir -t $HOME $_d --no-folding --restow
         _idx=$((_idx + 1))
     done
 
-    progress_bar 50 $_idx ${opts_count}
+    progress_bar_tag "done" 50 $_idx ${opts_count}
 }
 
 restow_dot() {
