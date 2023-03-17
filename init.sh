@@ -23,18 +23,20 @@ PARENT_DIR=$(dirname "$DIR")
 TARGET_DIR=$HOME
 
 #
+# source files
+#
+source $DIR/tui/tui.sh
+source $DIR/function/funcs.sh
+source $DIR/function/git.sh
+
+#
 # options variable
 #
-_custom_conf=$DIR/custom.conf
-if [ ! -f "$_custom_conf" ]; then
-    echo "no $_custom_conf"
-    cp "$DIR/default.conf" "$_custom_conf"
-fi
-
-source $_custom_conf
 
 declare _silent=false
 declare _user_repo
+declare _git_user_name
+declare _git_user_email
 
 #
 # parse args
@@ -61,6 +63,20 @@ done
 
 set -- "${POSITIONAL_ARGS[@]}" # restore positional parameters
 
+#
+# load custom.conf
+#
+_custom_conf=$DIR/custom.conf
+if [ ! -f "$_custom_conf" ]; then
+    echo "no $_custom_conf"
+    cp "$DIR/default.conf" "$_custom_conf"
+fi
+
+source $_custom_conf
+
+_git_user_name=$git_user_name
+_git_user_email=$git_user_email
+
 if [ -z $1 ]; then
     _user_repo=$custom_repo
 else
@@ -68,18 +84,19 @@ else
 fi
 
 #
-# source files
+# git config
 #
-source $DIR/tui/tui.sh
-source $DIR/function/funcs.sh
+git_check_config _git_user_name _git_user_email
 
 #
 # show info
 #
-printf "platform      : %s\n" "$(detect_os)"
-printf ".dotfiles dir : %s\n" "$PARENT_DIR"
-printf "silent mode   : %s\n" "$_silent"
-printf "repo          : %s\n" "$_user_repo"
+printf "platform       : %s\n" "$(detect_os)"
+printf ".dotfiles dir  : %s\n" "$PARENT_DIR"
+printf "silent mode    : %s\n" "$_silent"
+printf "repo           : %s\n" "$_user_repo"
+printf "git user name  : %s\n" "$_git_user_name"
+printf "git user email : %s\n" "$_git_user_email"
 
 #
 # check commands
@@ -107,13 +124,6 @@ fi
 stow_dot $PARENT_DIR _selected_conf
 
 #
-# write conf
-#
-echo "# last: $(date)" >$_custom_conf
-echo "stow_dir=(${_selected_conf[*]})" >>$_custom_conf
-echo "custom_repo=\"${_user_repo}\"" >>$_custom_conf
-
-#
 # user dotfiles
 #
 
@@ -130,12 +140,24 @@ list_of_dirs $_user_dir _custom_dir_list
 stow_dot $_user_dir _custom_dir_list
 
 #
-# git config
+# git write config
 #
-exit
-source $DIR/git.sh
+for _opt in ${_selected_conf[@]}; do
+    if [ $_opt == "git" ]; then
+        git_write_conf_path
+    fi
+done
+
+#
+# write conf
+#
+echo "# last: $(date)" >$_custom_conf
+echo "stow_dir=(${_selected_conf[*]})" >>$_custom_conf
+echo "custom_repo=\"${_user_repo}\"" >>$_custom_conf
+echo "git_user_name=\"${_git_user_name}\"" >>$_custom_conf
+echo "git_user_email=\"${_git_user_email}\"" >>$_custom_conf
 
 ##
 exit
 sudo chsh -s /bin/zsh
-sudo sh -c "echo 'export SHELL=/bin/zsh' > /etc/zsh/zshrc"
+source /bin/zsh
