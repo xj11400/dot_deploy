@@ -34,6 +34,9 @@ show_hint() {
     echo -e "${gray}✱ $1${normal}" >&2
 }
 
+show_question() {
+    echo -e "${green}? $1${normal}" >&2
+}
 
 show_step() {
     echo -e "${blue}✱ $1${normal}" >&2
