@@ -66,12 +66,19 @@ list_of_dirs() {
 stow_dot() {
     local _dir=$1
     local _list=$2[@]
+    local _idx=0
+
+    local opts; opts=( "${!_list}" )
+    local opts_count; opts_count=$((${#opts[@]}))
+
     for _d in ${!_list}; do
-        echo "${_dir}/$_d"
-        stow -d $_dir -t $HOME $_d --no-folding
-        # prograss bar
-        # [=======         ] 35% $_d
+        progress_bar 50 $_idx ${opts_count}
+        # echo "${_dir}/$_d"
+        stow -d $_dir -t $HOME $_d --no-folding --restow
+        _idx=$((_idx+1))
     done
+
+    progress_bar 50 100
 }
 
 restow_dot() {
@@ -80,7 +87,5 @@ restow_dot() {
     for _d in ${!_list}; do
         echo "${_dir}/$_d"
         stow -d $_dir -t $HOME $_d --no-folding --restow
-        # prograss bar
-        # [=======         ] 35% $_d
     done
 }
