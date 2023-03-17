@@ -52,11 +52,14 @@ progress_bar() {
     local numEmpty=$((width - numFilled))
 
     tput civis
+    tput el1
+
+    tput cub $(tput cols)
 
     printf "["
     printf "%${numFilled}s" | tr ' ' '='
     printf "%${numEmpty}s" | tr ' ' ' '
-    printf "] %d%%\r" $percentage
+    printf "] %d%%" $percentage
 
     if [[ $percentage -eq 100 ]]; then
         printf "\n"
