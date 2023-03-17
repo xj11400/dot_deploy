@@ -18,27 +18,6 @@ _upvar() {
     fi
 }
 
-_progress_bar() {
-    local percentage=$(echo "($2*100)/$3" | bc)
-    local item=$4
-    local width=$1
-    local numFilled=$((percentage * width / 100))
-    local numEmpty=$((width - numFilled))
-
-    tput civis
-    tput el
-
-    printf "["
-    printf "%${numFilled}s" | tr ' ' '='
-    printf "%${numEmpty}s" | tr ' ' ' '
-    printf "] %d%% %s\r" $percentage $item
-
-    if [[ $percentage -eq 100 ]]; then
-        printf "\n"
-        tput cnorm
-    fi
-}
-
 # check commands exist or not
 check_command() {
     if ! [ -x "$(command -v $1)" ]; then
@@ -93,13 +72,13 @@ stow_dot() {
     local opts_count=$((${#opts[@]}))
 
     for _d in ${!_list}; do
-        _progress_bar 50 $_idx ${opts_count} $_d
-        # echo "${_dir}/$_d"
+        progress_bar 50 $_idx ${opts_count} $_d
+        printf " %s" "$_d"
         stow -d $_dir -t $HOME $_d --no-folding --restow
         _idx=$((_idx + 1))
     done
 
-    _progress_bar 50 $_idx ${opts_count}
+    progress_bar 50 $_idx ${opts_count}
 }
 
 restow_dot() {
