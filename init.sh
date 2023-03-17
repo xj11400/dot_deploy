@@ -26,20 +26,47 @@ TARGET_DIR=$HOME
 # options variable
 #
 _custom_conf=$DIR/custom.conf
-if [ ! -f "$_custom_conf" ];then
+if [ ! -f "$_custom_conf" ]; then
     echo "no $_custom_conf"
     cp "$DIR/default.conf" "$_custom_conf"
 fi
 
 source $_custom_conf
 
-_user_repo=$custom_repo
-# declare _user_repo
-# if [ -z "$1" ];then
-#     _user_repo="$_xj_custom_repo"
-# else
-#     _user_repo="$custom_repo"
-# fi
+declare _silent=false
+declare _user_repo
+
+#
+# parse args
+#
+POSITIONAL_ARGS=()
+
+while [[ $# -gt 0 ]]; do
+    case $1 in
+    -s | --silent)
+        _silent=true
+        shift # past argument
+        # shift # past value
+        ;;
+    -* | --*)
+        echo "Unknown option $1"
+        exit 1
+        ;;
+    *)
+        POSITIONAL_ARGS+=("$1") # save positional arg
+        shift                   # past argument
+        ;;
+    esac
+done
+
+set -- "${POSITIONAL_ARGS[@]}" # restore positional parameters
+
+if [ -z $1 ]; then
+    _user_repo=$custom_repo
+else
+    _user_repo=$1
+fi
+
 #
 # source files
 #
@@ -49,9 +76,10 @@ source $DIR/function/funcs.sh
 #
 # show info
 #
-printf "platform     : %s\n" "$(detect_os)"
-printf ".dotfiles dir: %s\n" "$PARENT_DIR"
-printf "repo         : %s\n" "$_user_repo"
+printf "platform      : %s\n" "$(detect_os)"
+printf ".dotfiles dir : %s\n" "$PARENT_DIR"
+printf "silent mode   : %s\n" "$_silent"
+printf "repo          : %s\n" "$_user_repo"
 
 #
 # check commands
@@ -71,17 +99,19 @@ list_of_dirs $PARENT_DIR _dir_list
 
 # checkbox
 _selected_conf=("${stow_dir[@]}")
-checkbox_input "select config" "(x)" _dir_list _selected_conf
+if ! $_silent; then
+    checkbox_input "select config" "(x)" _dir_list _selected_conf
+fi
 
-echo ${_selected_conf[*]}
+# echo ${_selected_conf[*]}
 stow_dot $PARENT_DIR _selected_conf
 
 #
 # write conf
 #
-echo "# last: $(date)" > $_custom_conf
-echo "stow_dir=(${_selected_conf[*]})" >> $_custom_conf
-echo "custom_repo=\"${_user_repo}\"" >> $_custom_conf
+echo "# last: $(date)" >$_custom_conf
+echo "stow_dir=(${_selected_conf[*]})" >>$_custom_conf
+echo "custom_repo=\"${_user_repo}\"" >>$_custom_conf
 
 #
 # user dotfiles
@@ -96,7 +126,7 @@ else
 fi
 
 list_of_dirs $_user_dir _custom_dir_list
-echo ${_custom_dir_list[*]}
+# echo ${_custom_dir_list[*]}
 stow_dot $_user_dir _custom_dir_list
 
 #
