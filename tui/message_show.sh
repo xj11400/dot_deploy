@@ -7,7 +7,7 @@
 # @example
 #   show_error "Oh snap, that went horribly wrong"
 show_error() {
-    echo -e "\033[91;1m✘ $1\033[0m" >&2
+    echo -e "${red}✘ $1${normal}" >&2
 }
 
 # @description Display success message in stderr, prefixed by cross emoji
@@ -15,7 +15,7 @@ show_error() {
 # @example
 #   show_success "There it is! World peace."
 show_success() {
-    echo -e "\033[92;1m✔ $1\033[0m" >&2
+    echo -e "${green}✔ $1${normal}" >&2
 }
 
 # @description Display warning message in stderr, prefixed by cross emoji
@@ -23,7 +23,7 @@ show_success() {
 # @example
 #   show_warning "There it is! World peace."
 show_warning() {
-    echo -e "\033[93;1m❢ $1\033[0m" >&2
+    echo -e "${yellow}❢ $1${normal}" >&2
 }
 
 # @description Display Hint message in stderr, prefixed by cross emoji
@@ -31,5 +31,14 @@ show_warning() {
 # @example
 #   show_hint "There it is! World peace."
 show_hint() {
-    echo -e "\033[90;1m✱ $1\033[0m" >&2
+    echo -e "${gray}✱ $1${normal}" >&2
+}
+
+
+show_step() {
+    echo -e "${blue}✱ $1${normal}" >&2
+}
+
+show_msg() {
+    echo -e "$1" >&2
 }
