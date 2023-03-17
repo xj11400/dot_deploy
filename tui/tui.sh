@@ -20,6 +20,7 @@ tui() {
     source "$_source_dir/platform_helpers.sh"
 
     source "$_source_dir/inquirer.sh"
+    source "$_source_dir/progress_bar.sh"
 
 }
 
