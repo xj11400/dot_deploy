@@ -66,15 +66,33 @@ _progress_bar() {
 
 }
 
-progress_bar() {
-    local percentage=$(_norm_percentage $2 $3)
+# progress_bar
+# @arg1: tag
+# @arg2: width
+# @arg3: current value
+# @arg4: max value (default 100)
+progress_bar_tag() {
+    local percentage=$(_norm_percentage $3 $4)
 
-    _progress_bar $1 $percentage
+    _progress_bar $2 $percentage
+
+    # print tag
+    if [[ ! -z $1 ]]; then
+        printf " %s" $1
+    fi
 
     if [[ $percentage -eq 100 ]]; then
         printf "\n"
         tput cnorm
     fi
+}
+
+# progress_bar
+# @arg1: width
+# @arg2: current value
+# @arg3: max value (default 100)
+progress_bar() {
+    progress_bar_tag "" $1 $2 $3
 }
 
 progress_bar_print() {
@@ -87,6 +105,11 @@ progress_bar_print() {
 }
 
 progress_bar_full() {
+    local _size=$(($(tput cols) - 10))
+    progress_bar $_size $1 $2
+}
+
+progress_bar_large() {
     progress_bar 100 $1 $2
 }
 
@@ -98,7 +121,12 @@ progress_bar_small() {
     progress_bar 10 $1 $2
 }
 
-progress_bar_print_full() {
+progress_bar_print_large() {
+    local _size=$(($(tput cols) - 10))
+    progress_bar_print $_size $1 $2
+}
+
+progress_bar_print_large() {
     progress_bar_print 100 $1 $2
 }
 
