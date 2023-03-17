@@ -14,6 +14,14 @@ _compare() {
     }'
 }
 
+# _compare() {
+#     if [ "$(echo "$1 $2 $3" | bc)" == 0 ];then
+#         echo false
+#     else
+#         echo true
+#     fi
+# }
+
 _norm_precentage() {
     local percentage=$1
 
