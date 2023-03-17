@@ -16,10 +16,16 @@ tui() {
     source "$_source_dir/logging.sh"
     # shellcheck disable=SC1091
 
-    source "$_source_dir/platform_helpers.sh"
+    source "$_source_dir/colors.sh"
     source "$_source_dir/inquirer.sh"
+    source "$_source_dir/checkbox_input.sh"
+    source "$_source_dir/list_input.sh"
+    source "$_source_dir/text_input.sh"
+
     source "$_source_dir/progress_bar.sh"
+
     source "$_source_dir/message_show.sh"
+    source "$_source_dir/platform_helpers.sh"
 
 }
 
