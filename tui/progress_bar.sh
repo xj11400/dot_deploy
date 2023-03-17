@@ -22,7 +22,7 @@ _compare() {
 #     fi
 # }
 
-_norm_precentage() {
+_norm_percentage() {
     local percentage=$1
 
     if [ ! -z "$2" ]; then
@@ -45,8 +45,11 @@ _norm_precentage() {
     echo $percentage
 }
 
-progress_bar() {
-    local percentage=$(_norm_precentage $2 $3)
+# _progress_bar
+# @arg1: width
+# @arg2: percentage
+_progress_bar() {
+    local percentage=$2
     local width=$1
     local numFilled=$((percentage * width / 100))
     local numEmpty=$((width - numFilled))
@@ -61,10 +64,26 @@ progress_bar() {
     printf "%${numEmpty}s" | tr ' ' ' '
     printf "] %d%%" $percentage
 
+}
+
+progress_bar() {
+    local percentage=$(_norm_percentage $2 $3)
+
+    _progress_bar $1 $percentage
+
     if [[ $percentage -eq 100 ]]; then
         printf "\n"
         tput cnorm
     fi
+}
+
+progress_bar_print() {
+    local percentage=$(_norm_percentage $2 $3)
+
+    _progress_bar $1 $percentage
+
+    printf "\n"
+    tput cnorm
 }
 
 progress_bar_full() {
@@ -77,20 +96,6 @@ progress_bar_medium() {
 
 progress_bar_small() {
     progress_bar 10 $1 $2
-}
-
-progress_bar_print() {
-    local percentage=$2
-
-    if [ ! -z "$3" ]; then
-        percentage=$(echo "($2*100)/$3" | bc)
-    fi
-
-    progress_bar $1 $percentage
-
-    if [ $(echo "$percentage >= 100" | bc) == 0 ]; then
-        printf "\n"
-    fi
 }
 
 progress_bar_print_full() {
