@@ -101,10 +101,14 @@ printf "git user email : %s\n" "$_git_user_email"
 #
 # check commands
 #
-_chk_cmd=('git' 'stow' 'zsh' 'npm' 'xj')
+_chk_cmd=('git' 'stow' 'zsh' 'npm' 'vim' 'xj')
 
 for cmd in ${_chk_cmd[@]}; do
-    check_command $cmd
+    chk=$(check_command $cmd)
+    # if [ $cmd == "stow" ] && ! $chk;then
+    #     source $DIR/function/install_stow.sh
+    #     check_stow
+    # fi
 done
 
 #
