@@ -22,6 +22,7 @@ DIR="$(cd -P "$(dirname "$SOURCE")" && pwd)"
 PARENT_DIR=$(dirname "$DIR")
 TARGET_DIR=$HOME
 
+_custom_conf=$DIR/custom.conf
 #
 # source files
 #
@@ -47,6 +48,10 @@ while [[ $# -gt 0 ]]; do
     case $1 in
     -s | --silent)
         _silent=true
+        if [ ! -f "$_custom_conf" ]; then
+            echo "require '$_custom_conf' in silent mode."
+            exit 1
+        fi
         shift # past argument
         # shift # past value
         ;;
@@ -66,7 +71,6 @@ set -- "${POSITIONAL_ARGS[@]}" # restore positional parameters
 #
 # load custom.conf
 #
-_custom_conf=$DIR/custom.conf
 if [ ! -f "$_custom_conf" ]; then
     echo "no $_custom_conf"
     cp "$DIR/default.conf" "$_custom_conf"
