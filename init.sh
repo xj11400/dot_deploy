@@ -36,6 +36,7 @@ source $DIR/utility/git.sh
 
 declare _silent=false
 declare _user_repo
+declare _user_repo_branch
 declare _git_user_name
 declare _git_user_email
 
@@ -87,6 +88,12 @@ else
     _user_repo=$1
 fi
 
+if [ -z $custom_repo_branch ]; then
+    _user_repo_branch="master"
+else
+    _user_repo_branch=$custom_repo_branch
+fi
+
 #
 # git config
 #
@@ -99,6 +106,7 @@ printf "platform       : %s\n" "$(detect_os)"
 printf ".dotfiles dir  : %s\n" "$PARENT_DIR"
 printf "silent mode    : %s\n" "$_silent"
 printf "repo           : %s\n" "$_user_repo"
+printf "branch         : %s\n" "$_user_repo_branch"
 printf "git user name  : %s\n" "$_git_user_name"
 printf "git user email : %s\n" "$_git_user_email"
 
@@ -140,7 +148,7 @@ _user_dir="$PARENT_DIR/_custom"
 if [ -d "${_user_dir}" ]; then
     show_warning "${_user_dir} is already exist."
 else
-    git clone $_user_repo $_user_dir
+    git clone --branch $_user_repo_branch $_user_repo $_user_dir
 fi
 
 list_of_dirs $_user_dir _custom_dir_list
@@ -162,6 +170,7 @@ done
 echo "# last: $(date)" >$_custom_conf
 echo "stow_dir=(${_selected_conf[*]})" >>$_custom_conf
 echo "custom_repo=\"${_user_repo}\"" >>$_custom_conf
+echo "custom_repo_branch=\"${_user_repo_branch}\"" >>$_custom_conf
 echo "git_user_name=\"${_git_user_name}\"" >>$_custom_conf
 echo "git_user_email=\"${_git_user_email}\"" >>$_custom_conf
 
