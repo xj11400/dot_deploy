@@ -26,8 +26,8 @@ TARGET_DIR=$HOME
 # source files
 #
 source $DIR/tui/tui.sh
-source $DIR/function/funcs.sh
-source $DIR/function/git.sh
+source $DIR/utility/funcs.sh
+source $DIR/utility/git.sh
 
 #
 # options variable
@@ -106,7 +106,7 @@ _chk_cmd=('git' 'stow' 'zsh' 'npm' 'vim' 'xj')
 for cmd in ${_chk_cmd[@]}; do
     chk=$(check_command $cmd)
     # if [ $cmd == "stow" ] && ! $chk;then
-    #     source $DIR/function/install_stow.sh
+    #     source $DIR/utility/install_stow.sh
     #     check_stow
     # fi
 done
