@@ -1,0 +1,3 @@
+[submodule "stow"]
+	path = stow
+	url = https://github.com/xj11400/stow_sh.git
