@@ -117,9 +117,8 @@ _chk_cmd=('git' 'stow' 'zsh' 'npm' 'vim' 'xj')
 
 for cmd in ${_chk_cmd[@]}; do
     chk=$(check_command $cmd)
-    # if [ $cmd == "stow" ] && ! $chk;then
-    #     source $DIR/utility/install_stow.sh
-    #     check_stow
+    # if [ $cmd == "stow" ] && ! $chk; then
+    #     ln -s $DIR/stow/stow_sh.sh /usr/local/bin/stow
     # fi
 done
 
