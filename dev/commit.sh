@@ -9,7 +9,7 @@ function submodule_commit() {
 
 #submodule_commit
 
-NEW=$(git status | grep -E "modified:.+\(new commits\)" | awk '{print $2}')
+NEW=$(git status | grep -E "modified:.+\(.*new commits" | awk '{print $2}')
 for update in $NEW;do
     echo $update
     git add $update
