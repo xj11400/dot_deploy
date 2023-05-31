@@ -147,7 +147,7 @@ _user_dir="$PARENT_DIR/_custom"
 if [ -d "${_user_dir}" ]; then
     show_warning "${_user_dir} is already exist."
 else
-    git clone --branch $_user_repo_branch $_user_repo $_user_dir
+    git clone --recurse-submodules --remote-submodules --branch $_user_repo_branch $_user_repo $_user_dir
 fi
 
 list_of_dirs $_user_dir _custom_dir_list
