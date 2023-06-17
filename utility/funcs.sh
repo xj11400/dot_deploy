@@ -82,6 +82,23 @@ stow_dot() {
     progress_bar_tag "done" 50 $_idx ${opts_count}
 }
 
+stow_dot_user() {
+    local _dir=$1
+    local _list=$2[@]
+    local _idx=0
+
+    local opts=("${!_list}")
+    local opts_count=$((${#opts[@]}))
+
+    for _d in ${!_list}; do
+        progress_bar_tag $_d 50 $_idx ${opts_count}
+        stow -d $_dir -t $HOME $_d --restow
+        _idx=$((_idx + 1))
+    done
+
+    progress_bar_tag "done" 50 $_idx ${opts_count}
+}
+
 restow_dot() {
     local _dir=$1
     local _list=$2[@]

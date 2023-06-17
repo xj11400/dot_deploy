@@ -152,7 +152,7 @@ fi
 
 list_of_dirs $_user_dir _custom_dir_list
 # echo ${_custom_dir_list[*]}
-stow_dot $_user_dir _custom_dir_list
+stow_dot_user $_user_dir _custom_dir_list
 
 #
 # git write config
