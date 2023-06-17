@@ -143,7 +143,7 @@ stow_dot $PARENT_DIR _selected_conf
 #
 
 # - clone repo
-_user_dir="$PARENT_DIR/_custom"
+_user_dir="$PARENT_DIR/_user"
 if [ -d "${_user_dir}" ]; then
     show_warning "${_user_dir} is already exist."
 else
