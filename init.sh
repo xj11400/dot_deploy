@@ -22,7 +22,7 @@ DIR="$(cd -P "$(dirname "$SOURCE")" && pwd)"
 PARENT_DIR=$(dirname "$DIR")
 TARGET_DIR=$HOME
 
-_custom_conf=$DIR/custom.conf
+_custom_conf=$DIR/user.conf
 #
 # source files
 #
